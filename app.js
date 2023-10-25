@@ -43,6 +43,9 @@ app.use(limiter)
 app.use(helmet())
 app.use(cors())
 
+app.get("/", (req, res) => {
+  res.send("<h1>Blog API</h1>")
+})
 
 app.get("/api/v1/posts/all", getAllPosts)
 app.use("/api/v1/auth", authentication)
