@@ -10,6 +10,9 @@ import {notFoundError} from "./middlewares/notFoundError.js"
 // import DB connection
 import { connectDB } from "./db/connectDB.js"
 
+// import all posts controller
+import { getAllPosts } from "./controllers/posts.js";
+
 // import routers
 import { router as authentication } from "./routes/auth.js"
 import { router as postsRouter } from "./routes/posts.js"
@@ -40,6 +43,8 @@ app.use(limiter)
 app.use(helmet())
 app.use(cors())
 
+
+app.get("/api/v1/posts/all", getAllPosts)
 app.use("/api/v1/auth", authentication)
 app.use("/api/v1/posts", authorize, postsRouter)
 

@@ -5,8 +5,15 @@ import { StatusCodes } from "http-status-codes"
 import Posts from "../models/Posts.js";
 
 
-export const getAllPosts = (req, res) => {
-  res.send("All posts")
+export const getAllPosts = async (req, res) => {
+  const posts = await Posts.find({})
+
+  if (!posts){
+    return res.status(StatusCodes.OK).json({posts: `No posts`, nHbit: posts.length})
+
+  }
+
+  res.status(StatusCodes.OK).json({posts, nHbit: posts.length})
 }
 
 export const getAllUserPosts = async (req, res) => {
