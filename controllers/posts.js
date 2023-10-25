@@ -9,7 +9,7 @@ export const getAllPosts = async (req, res) => {
   const posts = await Posts.find({})
 
   if (!posts){
-    return res.status(StatusCodes.OK).json({posts: `No posts`, nHbit: posts.length})
+    return res.status(StatusCodes.NO_CONTENT).json({posts: `No posts`, nHbit: posts.length})
 
   }
 

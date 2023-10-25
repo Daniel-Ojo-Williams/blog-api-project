@@ -1,5 +1,6 @@
 import User from "../models/User.js"
 import { BadRequestError, NotFoundError, Unauthorized } from "../errors/custom-errors.js"
+import { StatusCodes } from "http-status-codes"
 
 
 export const register = async (req, res) => {
@@ -9,7 +10,7 @@ export const register = async (req, res) => {
   }
   const user = await User.create(req.body)
   const token = user.genToken()
-  res.status(200).json({user: token})
+  res.status(StatusCodes.CREATED).json({user: token})
 }
 
 export const login = async (req, res) => {
@@ -26,7 +27,7 @@ export const login = async (req, res) => {
     throw new Unauthorized(`Invalid Authentication`)
   }
   const token = user.genToken()
-  res.status(200).json({user: token})
+  res.status(StatusCodes.OK).json({user: token})
 }
 
 

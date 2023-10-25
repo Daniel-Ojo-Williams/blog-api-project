@@ -25,6 +25,11 @@ import helmet from "helmet"
 import cors from "cors"
 import {rateLimit} from "express-rate-limit";
 
+// swagger documentation
+import swaggerUi from "swagger-ui-express"
+import YAML from "yamljs"
+const swaggerJsDoc = YAML.load("./api-doc.yaml")
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   limit: 100, // limit each IP to 100 request per window (per 15 minutes here)
@@ -43,10 +48,12 @@ app.use(limiter)
 app.use(helmet())
 app.use(cors())
 
+
 app.get("/", (req, res) => {
   res.send("<h1>Blog API</h1>")
 })
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJsDoc))
 app.get("/api/v1/posts/all", getAllPosts)
 app.use("/api/v1/auth", authentication)
 app.use("/api/v1/posts", authorize, postsRouter)

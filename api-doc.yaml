@@ -1,0 +1,523 @@
+openapi: 3.0.3
+info:
+  title: Blog API
+  description: My first API doc
+  version: 1.0
+servers:
+  - url: "https://blog-api-apfd.onrender.com/api/v1"
+    description: Productio server
+
+schemes: [http, https]
+
+
+paths:
+  /auth/register:
+    post:
+      summary: Creates a new user account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fname:
+                  type: string
+                  example: wonka
+                lname:
+                  type: string
+                  example: willy
+                email:
+                  type: string
+                  example: willy@wonka.com
+                password:
+                  type: string
+                  example: willywonka
+              required:
+                - fname
+                - lname
+                - email
+                - password
+      
+      responses:
+        '201':
+          description: Created, returns a User object in the response body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "willy wonka"
+                  token: 
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoicm9iYnkgZGljayIsInVzZXJJZCI6IjY1MzgxMzY2NGEzMDk4ZjM5ZGM1MTJjZCIsImlhdCI6MTY5ODE3Mzc5OCwiZXhwIjoxNjk4MjYwMTk4fQ.9SoiI4S-mdOiz9ZcsBbHcnVoCfxies-vqT_52bo8Bi8
+
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: account with email exists already
+        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: internal server error
+
+  /auth/login:
+    post:
+      summary: Authenticate user, provide email and password, returns name and token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: willy@wonka.com
+                password:
+                  type: string
+                  example: willywonka
+              required:
+                - email
+                - password
+      
+      responses:
+        '200':
+          description: OK, returns a User object in the response body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "willy wonka"
+                  token: 
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoicm9iYnkgZGljayIsInVzZXJJZCI6IjY1MzgxMzY2NGEzMDk4ZjM5ZGM1MTJjZCIsImlhdCI6MTY5ODE3Mzc5OCwiZXhwIjoxNjk4MjYwMTk4fQ.9SoiI4S-mdOiz9ZcsBbHcnVoCfxies-vqT_52bo8Bi8
+
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: Incorrect username/password
+        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: internal server error
+
+  /posts/all:
+    get:
+      summary: Get posts
+      responses:
+        '200':
+          description: OK, returns an array of posts with details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: object
+                    example: 
+                        - _id: "65371bea1ebe621a420b6043"
+                          authorId: "65371bcd1ebe621a420b6040"
+                          authorName: "freaky muse"
+                          title: "Post title"
+                          content: "Post content."
+                          createdAt: "2023-10-24T01:20:42.392Z"
+                          updatedAt: "2023-10-24T01:20:42.392Z"
+                          __v: 0
+                        - _id: "65371cde4190a7bbe057af9f"
+                          authorId: "65371bcd1ebe621a420b6040"
+                          authorName: "freaky muse"
+                          title: "Post title"
+                          content: "Post content."
+                          createdAt: "2023-10-24T01:24:46.650Z"
+                          updatedAt: "2023-10-24T01:24:46.650Z"
+                          __v: 0
+                        - nHbit: 2
+
+
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    msg:
+                      type: string
+                      example: No post
+                    nHbit:
+        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: internal server error
+        
+  /posts:
+
+    get:
+      summary: Get all user's post
+      security:
+        - bearerAuth: []
+      
+      responses:
+        '200':
+          description: OK, returns a Posts object in the response body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: object
+                    example:
+                      - _id: "65371bea1ebe621a420b6043"
+                        authorId: "65371bcd1ebe621a420b6040"
+                        authorName: "freaky muse"
+                        title: "Post title"
+                        content: "Post content."
+                        createdAt: "2023-10-24T01:20:42.392Z"
+                        updatedAt: "2023-10-24T01:20:42.392Z"
+                        __v: 0
+                      - _id: "65371cde4190a7bbe057af9f"
+                        authorId: "65371bcd1ebe621a420b6040"
+                        authorName: "freaky muse"
+                        title: "Post title"
+                        content: "Post content."
+                        createdAt: "2023-10-24T01:24:46.650Z"
+                        updatedAt: "2023-10-24T01:24:46.650Z"
+                        __v: 0
+                      - nHbit: 2
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: not authorized to access this route.
+        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: internal server error
+
+    post:
+      summary: Creates a new post
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Post title"
+                content:
+                  type: string
+                  example: "Post content"
+              required:
+                - title
+                - content
+      
+      responses:
+        '200':
+          description: OK, returns a the new Post object in the response body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: object
+                    example:
+                      - _id: "65371bea1ebe621a420b6043"
+                        authorId: "65371bcd1ebe621a420b6040"
+                        authorName: "freaky muse"
+                        title: "Post title"
+                        content: "Post content."
+                        createdAt: "2023-10-24T01:20:42.392Z"
+                        updatedAt: "2023-10-24T01:20:42.392Z"
+                        __v: 0
+
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: Post title and content must be provided
+        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: internal server error        
+  
+  /posts/{postId}:
+    get:
+      summary: Get a post by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: postId
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: OK, returns the post with provided id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: object
+                    example: 
+                        - _id: "65371bea1ebe621a420b6043"
+                          authorId: "65371bcd1ebe621a420b6040"
+                          authorName: "freaky muse"
+                          title: "Post title"
+                          content: "Post content."
+                          createdAt: "2023-10-24T01:20:42.392Z"
+                          updatedAt: "2023-10-24T01:20:42.392Z"
+                          __v: 0
+
+
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    msg:
+                      type: string
+                      example: No post
+                    nHbit:
+        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: internal server error
+        
+
+    patch:
+      summary: Update a post with the provided id
+      security:
+        - bearerAuth: []
+      
+      parameters:
+        - in: path
+          name: postId
+          schema:
+            type: integer
+          required: true
+      
+      responses:
+        '200':
+          description: OK, returns a updated Posts object in the response body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: object
+                    example:
+                      - _id: "65371bea1ebe621a420b6043"
+                        authorId: "65371bcd1ebe621a420b6040"
+                        authorName: "freaky muse"
+                        title: "Post title"
+                        content: "Post content."
+                        createdAt: "2023-10-24T01:20:42.392Z"
+                        updatedAt: "2023-10-24T01:20:42.392Z"
+                        __v: 0
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: not authorized to access this route.
+        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: internal server error
+
+    delete:
+      summary: delete post with the provided id
+      parameters:
+        - in: path
+          name: post Id
+          schema:
+            type: integer
+          required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK, returns a success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: object
+                    example: "Post deleted successfully"
+                      
+                        
+
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: Post with the provided id not found
+        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: internal server error 
+
+  /post/{userId}:       
+    delete:
+      summary: delete account and all posts attached 
+      parameters:
+        - in: path  
+          name: postId
+          schema:
+            type: integer
+          required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK, returns a success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: object
+                    example: "Account deleted successfully"
+                      
+                        
+
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: Account with the provided id not found
+        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: internal server error        
+
+
+components:
+  securitySchemes:
+        BearerAuth:
+          type: http
+          scheme: bearer
+          bearerFormat: JWT
