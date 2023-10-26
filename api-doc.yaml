@@ -194,7 +194,7 @@ paths:
     get:
       summary: Get all user's post
       security:
-        - bearerAuth: []
+        - BearerAuth: []
       
       responses:
         '200':
@@ -250,7 +250,7 @@ paths:
     post:
       summary: Creates a new post
       security:
-        - bearerAuth: []
+        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -314,7 +314,7 @@ paths:
     get:
       summary: Get a post by id
       security:
-        - bearerAuth: []
+        - BearerAuth: []
       parameters:
         - in: path
           name: postId
@@ -370,7 +370,7 @@ paths:
     patch:
       summary: Update a post with the provided id
       security:
-        - bearerAuth: []
+        - BearerAuth: []
       
       parameters:
         - in: path
@@ -430,7 +430,7 @@ paths:
             type: integer
           required: true
       security:
-        - bearerAuth: []
+        - BearerAuth: []
       responses:
         '200':
           description: OK, returns a success message
@@ -477,7 +477,7 @@ paths:
             type: integer
           required: true
       security:
-        - bearerAuth: []
+        - BearerAuth: []
       responses:
         '200':
           description: OK, returns a success message
