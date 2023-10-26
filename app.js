@@ -50,7 +50,7 @@ app.use(cors())
 
 
 app.get("/", (req, res) => {
-  res.send("<h1>Blog API</h1>")
+  res.send("<h1>Blog API</h1><a href='/api-docs'>Documentation</a>")
 })
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJsDoc))

@@ -4,10 +4,10 @@ info:
   description: My first API doc
   version: 1.0
 servers:
-  - url: "https://blog-api-apfd.onrender.com/api/v1"
-    description: Productio server
+  - url: https://blog-api-apfd.onrender.com/api/v1
+    description: Production server
 
-schemes: [http, https]
+schemes: [https]
 
 
 paths:
